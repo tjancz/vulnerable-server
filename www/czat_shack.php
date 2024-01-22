@@ -10,8 +10,7 @@ $messages_buffer_file = 'messages.json';
 // Number of most recent messages kept in the buffer
 $messages_buffer_size = 10;
 
-if ( isset($_POST['content']) and isset($_SESSION['user_id']) )
-{
+if (isset($_POST['content']) and isset($_SESSION['user_id'])) {
     $_SESSION['user_id'] = $_POST['user_id'];
     // Open, lock and read the message buffer file
     $buffer = fopen($messages_buffer_file, 'r+b');
@@ -44,19 +43,25 @@ if ( isset($_POST['content']) and isset($_SESSION['user_id']) )
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Simple Chat</title>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript">
         // <![CDATA[
-        $(document).ready(function(){
+        $(document).ready(function () {
+            // Upload name
+            var $form_div = $('#submit-form');
+            setInterval(function () {
+                $form_div.load("czat_shack.php #submit-form");
+            }, 30000);
+
             // Remove the "loading…" list entry
             $('ul#messages > li').remove();
 
-            $('form').submit(function(){
+            $('form').submit(function () {
                 var form = $(this);
-                var name =  form.find("input[name='user_id']").val();
-                var content =  form.find("input[name='content']").val();
+                var name = form.find("input[name='user_id']").val();
+                var content = form.find("input[name='content']").val();
 
                 // Only send a new message if it's not empty (also it's ok for the server we don't need to send senseless messages)
                 if (name == '' || content == '')
@@ -64,17 +69,22 @@ if ( isset($_POST['content']) and isset($_SESSION['user_id']) )
 
                 // Append a "pending" message (not yet confirmed from the server) as soon as the POST request is finished. The
                 // text() method automatically escapes HTML so no one can harm the client.
-                $.post(form.attr('action'), {'user_id': name, 'content': content}, function(data, status){
+                $.post(form.attr('action'), {'user_id': name, 'content': content}, function (data, status) {
                     $('<li class="pending" />').text(content).prepend($('<small />').text(name)).appendTo('ul#messages');
-                    $('ul#messages').scrollTop( $('ul#messages').get(0).scrollHeight );
+                    $('ul#messages').scrollTop($('ul#messages').get(0).scrollHeight);
                     form.find("input[name='content']").val('').focus();
                 });
                 return false;
             });
 
             // Poll-function that looks for new messages
-            var poll_for_new_messages = function(){
-                $.ajax({url: 'messages.json', dataType: 'json', ifModified: true, timeout: 2000, success: function(messages, status){
+            var poll_for_new_messages = function () {
+                $.ajax({
+                    url: 'messages.json',
+                    dataType: 'json',
+                    ifModified: true,
+                    timeout: 2000,
+                    success: function (messages, status) {
                         // Skip all responses with unmodified data
                         if (!messages)
                             return;
@@ -90,15 +100,11 @@ if ( isset($_POST['content']) and isset($_SESSION['user_id']) )
 
                         // Add a list entry for every incomming message, but only if we not already inserted it (hence the check for
                         // the newer ID than the last inserted message).
-                        for(var i = 0; i < messages.length; i++)
-                        {
+                        for (var i = 0; i < messages.length; i++) {
                             var msg = messages[i];
-                            if (msg.id > last_message_id)
-                            {
+                            if (msg.id > last_message_id) {
                                 var date = new Date(msg.time * 1000);
-                                $('<li/>').html(msg.content).
-                                prepend( $('<small />').text(date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ' ' + msg.name) ).
-                                appendTo('ul#messages');
+                                $('<li/>').html(msg.content).prepend($('<small />').text(date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ' ' + msg.name)).appendTo('ul#messages');
                                 $('ul#messages').data('last_message_id', msg.id);
                             }
                         }
@@ -106,8 +112,9 @@ if ( isset($_POST['content']) and isset($_SESSION['user_id']) )
                         // Remove all but the last 50 messages in the list to prevent browser slowdown with extremely large lists
                         // and finally scroll down to the newes message.
                         $('ul#messages > li').slice(0, -50).remove();
-                        $('ul#messages').scrollTop( $('ul#messages').get(0).scrollHeight );
-                    }});
+                        $('ul#messages').scrollTop($('ul#messages').get(0).scrollHeight);
+                    }
+                });
             };
 
             // Kick of the poll function and repeat it every two seconds
@@ -117,27 +124,91 @@ if ( isset($_POST['content']) and isset($_SESSION['user_id']) )
         // ]]>
     </script>
     <style type="text/css">
-        html { margin: 0em; padding: 0; }
-        body { margin: 2em; padding: 0; font-family: 'DejaVu Sans', sans-serif; font-size: medium; color: #333; }
-        h1 { margin: 0; padding: 0; font-size: 2em; }
-        p.subtitle { margin: 0; padding: 0 0 0 0.125em; font-size: 0.77em; color: gray; }
+        html {
+            margin: 0em;
+            padding: 0;
+        }
 
-        ul#messages { overflow: auto; height: 15em; margin: 1em 0; padding: 0 3px; list-style: none; border: 1px solid gray; }
-        ul#messages li { margin: 0.35em 0; padding: 0; }
-        ul#messages li small { display: block; font-size: 0.59em; color: gray; }
-        ul#messages li.pending { color: #aaa; }
+        body {
+            margin: 2em;
+            padding: 0;
+            font-family: 'DejaVu Sans', sans-serif;
+            font-size: medium;
+            color: #333;
+        }
 
-        form { font-size: 1em; margin: 1em 0; padding: 0; }
-        form p { position: relative; margin: 0.5em 0; padding: 0; }
-        form p input { font-size: 1em; }
-        form p input#user_id { width: 10em; }
-        form p button { position: absolute; top: 0; right: -0.5em; }
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 2em;
+        }
 
-        ul#messages, form p, input#content { width: 40em; }
+        p.subtitle {
+            margin: 0;
+            padding: 0 0 0 0.125em;
+            font-size: 0.77em;
+            color: gray;
+        }
 
-        pre { font-size: 0.77em; }
+        ul#messages {
+            overflow: auto;
+            height: 15em;
+            margin: 1em 0;
+            padding: 0 3px;
+            list-style: none;
+            border: 1px solid gray;
+        }
+
+        ul#messages li {
+            margin: 0.35em 0;
+            padding: 0;
+        }
+
+        ul#messages li small {
+            display: block;
+            font-size: 0.59em;
+            color: gray;
+        }
+
+        ul#messages li.pending {
+            color: #aaa;
+        }
+
+        form {
+            font-size: 1em;
+            margin: 1em 0;
+            padding: 0;
+        }
+
+        form p {
+            position: relative;
+            margin: 0.5em 0;
+            padding: 0;
+        }
+
+        form p input {
+            font-size: 1em;
+        }
+
+        form p input#user_id {
+            width: 10em;
+        }
+
+        form p button {
+            position: absolute;
+            top: 0;
+            right: -0.5em;
+        }
+
+        ul#messages, form p, input#content {
+            width: 40em;
+        }
+
+        pre {
+            font-size: 0.77em;
+        }
     </style>
-    <meta name="author" content="Stephan Soller" />
+    <meta name="author" content="Stephan Soller"/>
 </head>
 <body>
 
@@ -147,18 +218,19 @@ if ( isset($_POST['content']) and isset($_SESSION['user_id']) )
 <ul id="messages">
     <li>loading…</li>
 </ul>
-
-<form action="<?= htmlentities($_SERVER['PHP_SELF'], ENT_COMPAT, 'UTF-8'); ?>" method="post">
-    <p>
-        <input type="text" name="content" id="content" />
-    </p>
-    <p>
-        <label>
-            <input type="hidden" name="user_id" id="name" value=<?php echo '"'.$_SESSION['user_id'].'""';?> />
-        </label>
-        <button type="submit">Send</button>
-    </p>
-</form>
+<div id="submit-form">
+    <form action="<?= htmlentities($_SERVER['PHP_SELF'], ENT_COMPAT, 'UTF-8'); ?>" method="post">
+        <p>
+            <input type="text" name="content" id="content"/>
+        </p>
+        <p>
+            <label>
+                <input type="hidden" name="user_id" id="name" value=<?php echo '"' . $_SESSION['user_id'] . '""'; ?>/>
+            </label>
+            <button type="submit">Send</button>
+        </p>
+    </form>
+</div>
 
 <p>Back to the <a href="./">project page</a>.</p>
 

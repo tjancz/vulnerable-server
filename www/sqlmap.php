@@ -29,7 +29,7 @@
     </form>
 		</div>
 <?php  
-$connection = mysqli_connect("mysql", "root", "tiger","docker");
+$connection = mysqli_connect("mariadb", "scott", "tiger","docker");
 if (!$connection){
     die("Database Connection Failed" . mysqli_error($connection));
 }

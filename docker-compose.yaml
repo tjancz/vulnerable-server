@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+
+  # PHP Service
+  php:
+    build: './php_docker/'
+    volumes:
+      - ./www/:/var/www/html/
+
+  # Apache Service
+  apache:
+    build: './apache_docker/'
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+    volumes:
+      - ./www/:/var/www/html/
+
+  # MariaDB Service
+  mariadb:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: tiger
+      MARIADB_USER: scott
+      MARIADB_PASSWORD: tiger
+      MARIADB_DATABASE: docker
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  # phpMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mariadb
+    depends_on:
+      - mariadb
+
+# Volumes
+volumes:
+  mysqldata:
