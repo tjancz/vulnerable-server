@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  modsecurity:
+    image: owasp/modsecurity-crs:nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./modsecurity.d:/etc/modsecurity.d
+    depends_on:
+      - php-apache
+    networks:
+      - app-network
+
+  php-apache:
+    image: php:7.4-apache
+    volumes:
+      - ./php-app:/var/www/html
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
