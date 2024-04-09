@@ -19,6 +19,7 @@ services:
 
   # MariaDB Service
   mariadb:
+    platform: linux/amd64
     image: mariadb:10.11
     environment:
       MYSQL_ROOT_PASSWORD: tiger
@@ -30,6 +31,7 @@ services:
 
   # phpMyAdmin Service
   phpmyadmin:
+    platform: linux/amd64
     image: phpmyadmin/phpmyadmin:latest
     ports:
       - 8084:80
