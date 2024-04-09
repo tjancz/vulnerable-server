@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/python_scripts/python_scripts.iml" filepath="$PROJECT_DIR$/python_scripts/python_scripts.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/vulnerable-server.iml" filepath="$PROJECT_DIR$/.idea/vulnerable-server.iml" />
     </modules>
   </component>

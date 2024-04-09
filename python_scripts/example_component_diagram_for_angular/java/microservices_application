@@ -1,0 +1,42 @@
+digraph "Example Component Diagram for Angular/Java/Microservices Application" {
+	graph [fontcolor="#2D3436" fontname="Sans-Serif" fontsize=15 label="Example Component Diagram for Angular/Java/Microservices Application" nodesep=0.60 pad=2.0 rankdir=LR ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	subgraph cluster_Frontend {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Frontend labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"2eebc018da0348a8bcc0ac877d0ded7e" [label="Angular App" height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/programming/framework/angular.png" shape=none]
+	}
+	subgraph "cluster_Backend Services" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Backend Services" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		subgraph "cluster_Java Backend API" {
+			graph [bgcolor="#EBF3E7" fontname="Sans-Serif" fontsize=12 label="Java Backend API" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+			"09f55d043c894f79a6fbea77c002796c" [label="Spring Boot" height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/programming/language/java.png" shape=none]
+		}
+		subgraph cluster_Microservices {
+			graph [bgcolor="#EBF3E7" fontname="Sans-Serif" fontsize=12 label=Microservices labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+			"307a35a5e36d42d6bc5f7c0b9ffbb962" [label="Service 1" height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/programming/language/java.png" shape=none]
+			"52cd3d0088fa416a8c1d4b3012813e71" [label="Service 2" height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/programming/language/java.png" shape=none]
+			"68a6a9ee16ca4b3e939e530549668317" [label="Service 3" height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/programming/language/java.png" shape=none]
+		}
+	}
+	subgraph cluster_Infrastructure {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Infrastructure labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"48a03e4b49f6498b9f5a5673b8f45dfc" [label=Nginx height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/onprem/network/nginx.png" shape=none]
+		"1915e50c30bd48d5995f1b70682bb5d5" [label=Kafka height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/onprem/queue/kafka.png" shape=none]
+		"4688f81bd9074492972622d5d7ebbe3d" [label="Redis Cache" height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/onprem/inmemory/redis.png" shape=none]
+		fd74115c6611463cbea05f391e15ce01 [label="PostgreSQL DB" height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/onprem/database/postgresql.png" shape=none]
+	}
+	"7f8f23765e4f440c89cd2293ce10b66e" [label=User height=1.9 image="/Users/tomaszjanczewski/repos/vulnerable-server/python_scripts/venv/lib/python3.9/site-packages/resources/onprem/client/user.png" shape=none]
+	"7f8f23765e4f440c89cd2293ce10b66e" -> "48a03e4b49f6498b9f5a5673b8f45dfc" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"48a03e4b49f6498b9f5a5673b8f45dfc" -> "2eebc018da0348a8bcc0ac877d0ded7e" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"2eebc018da0348a8bcc0ac877d0ded7e" -> "09f55d043c894f79a6fbea77c002796c" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"09f55d043c894f79a6fbea77c002796c" -> fd74115c6611463cbea05f391e15ce01 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"09f55d043c894f79a6fbea77c002796c" -> "4688f81bd9074492972622d5d7ebbe3d" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"09f55d043c894f79a6fbea77c002796c" -> "1915e50c30bd48d5995f1b70682bb5d5" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"1915e50c30bd48d5995f1b70682bb5d5" -> "307a35a5e36d42d6bc5f7c0b9ffbb962" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"1915e50c30bd48d5995f1b70682bb5d5" -> "52cd3d0088fa416a8c1d4b3012813e71" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"1915e50c30bd48d5995f1b70682bb5d5" -> "68a6a9ee16ca4b3e939e530549668317" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"307a35a5e36d42d6bc5f7c0b9ffbb962" -> fd74115c6611463cbea05f391e15ce01 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"52cd3d0088fa416a8c1d4b3012813e71" -> fd74115c6611463cbea05f391e15ce01 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"68a6a9ee16ca4b3e939e530549668317" -> fd74115c6611463cbea05f391e15ce01 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+}

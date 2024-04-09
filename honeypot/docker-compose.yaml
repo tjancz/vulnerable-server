@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  dionaea:
+    image: dinotools/dionaea
+    platform: linux/amd64
+    volumes:
+      - ./services:/opt/dionaea/etc/dionaea/services-enabled
+#      - ./sysconfig:/etc/default/dionaea
+#      - ./dionaea:/etc/dionaea/
+#      - ./configs:/opt/dionaea/etc/dionaea
+#      - ./data:/opt/dionaea/var/lib/dionaea
+      - ./log:/opt/dionaea/var/log/dionaea
+    env_file:
+      - dionaea.env
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+
