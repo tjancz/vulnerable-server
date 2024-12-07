@@ -1,0 +1,2 @@
+2024/05/15 08:05:23 [emerg] 1#1: unknown log format "incoming_log" in /etc/nginx/conf.d/default.conf:4
+2024/05/15 08:07:13 [emerg] 1#1: "http" directive is not allowed here in /etc/nginx/conf.d/default.conf:1
